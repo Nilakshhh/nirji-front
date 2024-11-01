@@ -29,14 +29,26 @@ const UsersList: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <h2>All Users</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-8 bg-gray-100 min-h-screen">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6">All Users</h2>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {users.map((user) => (
-                    <div key={user.id} className="border rounded-lg p-4 shadow-md">
-                        <img src={user.dpImage} alt={`${user.username}'s profile`} className="rounded-full h-20 w-20 object-cover mb-2" />
-                        <h3 className="font-bold cursor-pointer" onClick={() => router.push(`/profile/${user.id}`)}>{user.username}</h3>
+                    <div
+                        key={user.id}
+                        className="flex flex-col items-center bg-white border border-gray-200 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    >
+                        <img
+                            src={user.dpImage}
+                            alt={`${user.username}'s profile`}
+                            className="rounded-full h-24 w-24 object-cover mb-4 border-4 border-indigo-200"
+                        />
+                        <h3
+                            className="text-lg font-medium text-gray-800 hover:text-indigo-600 cursor-pointer transition-colors duration-200"
+                            onClick={() => router.push(`/profile/${user.id}`)}
+                        >
+                            {user.username}
+                        </h3>
                     </div>
                 ))}
             </div>

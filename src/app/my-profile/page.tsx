@@ -4,11 +4,13 @@ import UploadImageModal from '@/components/UploadimageModal';
 import { user_details } from '@/lib/queries'; // Adjust the import path as necessary
 import Cookies from 'js-cookie';
 import Banner from '@/components/ProfileBanner';
+import { useRouter } from 'next/navigation';
 
 const MyProfile: React.FC = () => {
   const id = Cookies.get('id'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null); // Adjust the type as needed
+  const router = useRouter();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -16,6 +18,13 @@ const MyProfile: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    Cookies.set('id', '');
+    Cookies.set('token', '');
+    Cookies.set('isLoggedIn', 'false');
+    router.push('/');
   };
 
   const fetchUserDetails = async () => {
@@ -34,16 +43,18 @@ const MyProfile: React.FC = () => {
   }, [id]); // Run this effect when the component mounts or when the ID changes
 
   if (!userData) {
-    return <div>Loading...</div>; // Optional loading state while fetching user details
+    return <div className="flex justify-center items-center h-screen text-lg">Loading...</div>; // Loading state
   }
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto p-6">
       <Banner
         profileImage={userData.dpImage} // Replace with actual image URL
         profileName={userData.username}
         numberOfPosts={userData.profileImages.length}
         onPost={handleOpenModal}
+        onLogout={handleLogout}
+        showButtons={true}
       />
       
       <UploadImageModal
@@ -52,10 +63,16 @@ const MyProfile: React.FC = () => {
         onUploadSuccess={fetchUserDetails} // Pass the fetch function as a prop
       />
       
-      <h2 className="mt-4">Posts</h2>
-      <div className="grid grid-cols-3 gap-2">
+      <h2 className="mt-8 mb-4 text-xl font-semibold text-gray-800">Posts</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {userData.profileImages.map((image: any, index: number) => (
-          <img key={index} src={image.data} alt={`Profile Image ${index + 1}`} className="rounded-lg w-full h-auto" />
+          <div key={index} className="relative overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-105">
+            <img 
+              src={image.data} 
+              alt={`Profile Image ${index + 1}`} 
+              className="object-cover w-full h-48 rounded-lg" 
+            />
+          </div>
         ))}
       </div>
     </div>
