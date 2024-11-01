@@ -26,12 +26,14 @@ export const updateUserDetails = async (
   dpImage: ArrayBuffer,
   id?: string,
   username?: string,
+  bio?: string,
 ) => {
   const dpImageBase64 = arrayBufferToBase64(dpImage); // Convert ArrayBuffer to Base64
   // console.log(dpImageBase64, "dd");
   return await apiRequest(`${endpoints.updateUser}/${id}`, 'PUT', {
     username,
     dpImage: dpImageBase64, // Send as Base64
+    bio
   });
 };
 

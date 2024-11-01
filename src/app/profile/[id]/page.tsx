@@ -53,6 +53,7 @@ const MyProfile: React.FC = () => {
         profileImage={userData.dpImage} // Replace with actual image URL
         profileName={userData.username}
         numberOfPosts={userData.profileImages.length}
+        bio={userData.bio}
         onPost={handleOpenModal}
         onLogout={handleLogout}
         showButtons={false}

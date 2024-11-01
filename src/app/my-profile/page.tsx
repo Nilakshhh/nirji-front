@@ -57,9 +57,9 @@ const MyProfile: React.FC = () => {
     return <div className="flex justify-center items-center h-screen text-lg">Loading...</div>; // Loading state
   }
 
-  const handleEditSubmit = async (updatedData: { username: string; dpImage: ArrayBuffer}) => {
+  const handleEditSubmit = async (updatedData: { username: string; dpImage: ArrayBuffer; bio:string }) => {
     try {
-      await updateUserDetails(updatedData.dpImage, id, updatedData.username);
+      await updateUserDetails(updatedData.dpImage, id, updatedData.username, updatedData.bio);
       fetchUserDetails(); // Refetch user details after updating
       handleEditCloseModal(); // Close the edit modal
     } catch (error) {
@@ -73,6 +73,7 @@ const MyProfile: React.FC = () => {
         profileImage={userData.dpImage} // Replace with actual image URL
         profileName={userData.username}
         numberOfPosts={userData.profileImages.length}
+        bio={userData.bio}
         onPost={handleOpenModal}
         onLogout={handleLogout}
         onEdit={handleEditOpenModal}

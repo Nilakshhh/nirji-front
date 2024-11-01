@@ -4,7 +4,8 @@ interface BannerProps {
   profileImage: string;
   profileName: string;
   numberOfPosts: number;
-  showButtons:boolean;
+  showButtons: boolean;
+  bio: string;
   onEdit?: () => void;
   onPost?: () => void;
   onLogout?: () => void;
@@ -15,6 +16,7 @@ const Banner: React.FC<BannerProps> = ({
   profileName,
   numberOfPosts,
   showButtons,
+  bio,
   onEdit,
   onPost,
   onLogout
@@ -29,27 +31,30 @@ const Banner: React.FC<BannerProps> = ({
       <div className="flex-grow">
         <h2 className="text-xl font-semibold">{profileName}</h2>
         <p className="text-gray-500">{numberOfPosts} posts</p>
+        <p className="text-gray-700 mt-1">{bio}</p> {/* Display the bio */}
       </div>
-      {showButtons && <div className="space-x-2">
-        <button 
-        onClick={onLogout}
-        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-        >
-          Logout
-        </button>
-        <button
-          onClick={onEdit}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          Edit
-        </button>
-        <button
-          onClick={onPost}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-        >
-          Post
-        </button>
-      </div>}
+      {showButtons && (
+        <div className="space-x-2">
+          <button 
+            onClick={onLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+          <button
+            onClick={onEdit}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Edit
+          </button>
+          <button
+            onClick={onPost}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+          >
+            Post
+          </button>
+        </div>
+      )}
     </div>
   );
 };

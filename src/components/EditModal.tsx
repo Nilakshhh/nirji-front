@@ -9,7 +9,8 @@ interface EditModalProps {
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSubmit, userData }) => {
   const [username, setUsername] = useState(userData.username);
-  const [dpImage, setDpImage] = useState<string | null>(userData.dpImage); // Adjust based on your dpImage structure
+  const [bio, setBio] = useState(userData.bio); // Add state for bio
+  const [dpImage, setDpImage] = useState<string | null>(userData.dpImage);
   const [newDpImage, setNewDpImage] = useState<ArrayBuffer | null>(null); // To hold the new uploaded image
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,11 +18,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSubmit, userDa
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Store the result as ArrayBuffer
         const arrayBuffer = reader.result as ArrayBuffer; 
         setNewDpImage(arrayBuffer);
       };
-      reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
+      reader.readAsArrayBuffer(file);
     }
   };
 
@@ -29,18 +29,21 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSubmit, userDa
     e.preventDefault();
     const updatedData = {
       username,
-      dpImage: newDpImage || dpImage, // Use new image if provided, otherwise keep the old one
+      bio, // Include bio in the updated data
+      dpImage: newDpImage || dpImage,
     };
     onSubmit(updatedData);
     onClose();
   };
 
   useEffect(() => {
-    // Update dpImage when userData changes
+    // Update state when userData changes
+    setUsername(userData.username);
+    setBio(userData.bio); // Set bio from userData
     setDpImage(userData.dpImage);
   }, [userData]);
 
-  if (!isOpen) return null; // Don't render modal if it's not open
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
@@ -55,6 +58,16 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, onSubmit, userDa
               onChange={(e) => setUsername(e.target.value)}
               className="mt-1 p-2 border border-gray-300 rounded w-full"
               required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Bio</label>
+            <textarea
+              value={bio} // Bind textarea to bio state
+              onChange={(e) => setBio(e.target.value)}
+              className="mt-1 p-2 border border-gray-300 rounded w-full"
+              rows={3} // Set rows for better height
+              maxLength={3000} // Limit the bio length
             />
           </div>
           <div className="mb-4">
