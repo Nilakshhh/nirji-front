@@ -22,6 +22,20 @@ export const register = async (
   });
 };
 
+export const updateUserDetails = async (
+  dpImage: ArrayBuffer,
+  id?: string,
+  username?: string,
+) => {
+  const dpImageBase64 = arrayBufferToBase64(dpImage); // Convert ArrayBuffer to Base64
+  // console.log(dpImageBase64, "dd");
+  return await apiRequest(`${endpoints.updateUser}/${id}`, 'PUT', {
+    username,
+    dpImage: dpImageBase64, // Send as Base64
+  });
+};
+
+
 export const upload_profile_image = async (userId: any, token: any, image: ArrayBuffer | null) => {
   const imageBase64 = image ? arrayBufferToBase64(image) : null; // Convert ArrayBuffer to Base64
   return await apiRequest(`${endpoints.uploadProfileImage}`, 'POST', {

@@ -5,11 +5,14 @@ import { user_details } from '@/lib/queries'; // Adjust the import path as neces
 import Cookies from 'js-cookie';
 import Banner from '@/components/ProfileBanner';
 import { useRouter } from 'next/navigation';
+import EditModal from '@/components/EditModal';
+import { updateUserDetails } from '@/lib/mutations'; // Adjust the import path for your API function
 
 const MyProfile: React.FC = () => {
-  const id = Cookies.get('id'); 
+  const id = Cookies.get('id');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null); // Adjust the type as needed
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const router = useRouter();
 
   const handleOpenModal = () => {
@@ -18,6 +21,14 @@ const MyProfile: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+  
+  const handleEditOpenModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditCloseModal = () => {
+    setIsEditModalOpen(false);
   };
 
   const handleLogout = () => {
@@ -46,6 +57,16 @@ const MyProfile: React.FC = () => {
     return <div className="flex justify-center items-center h-screen text-lg">Loading...</div>; // Loading state
   }
 
+  const handleEditSubmit = async (updatedData: { username: string; dpImage: ArrayBuffer}) => {
+    try {
+      await updateUserDetails(updatedData.dpImage, id, updatedData.username);
+      fetchUserDetails(); // Refetch user details after updating
+      handleEditCloseModal(); // Close the edit modal
+    } catch (error) {
+      console.error('Error updating user details:', error);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <Banner
@@ -54,23 +75,31 @@ const MyProfile: React.FC = () => {
         numberOfPosts={userData.profileImages.length}
         onPost={handleOpenModal}
         onLogout={handleLogout}
+        onEdit={handleEditOpenModal}
         showButtons={true}
       />
-      
+
       <UploadImageModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onUploadSuccess={fetchUserDetails} // Pass the fetch function as a prop
       />
-      
+
+      <EditModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditCloseModal}
+        onSubmit={handleEditSubmit}
+        userData={userData} // Pass existing user data
+      />
+
       <h2 className="mt-8 mb-4 text-xl font-semibold text-gray-800">Posts</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {userData.profileImages.map((image: any, index: number) => (
           <div key={index} className="relative overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-105">
-            <img 
-              src={image.data} 
-              alt={`Profile Image ${index + 1}`} 
-              className="object-cover w-full h-48 rounded-lg" 
+            <img
+              src={image.data}
+              alt={`Profile Image ${index + 1}`}
+              className="object-cover w-full h-48 rounded-lg"
             />
           </div>
         ))}
