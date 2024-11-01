@@ -24,7 +24,7 @@ export const register = async (
 
 export const upload_profile_image = async (userId: any, token: any, image: ArrayBuffer | null) => {
   const imageBase64 = image ? arrayBufferToBase64(image) : null; // Convert ArrayBuffer to Base64
-  return await apiRequest(`${endpoints.uploadProfileImage}/${userId}`, 'POST', {
+  return await apiRequest(`${endpoints.uploadProfileImage}`, 'POST', {
       userId,
       image: imageBase64,
   });
