@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { login } from '../lib/mutations'; // Adjust the path as necessary
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormProps {
     onSwitch: () => void;
@@ -9,6 +11,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -17,6 +20,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitch }) => {
         try {
             const response = await login(username, password);
             console.log('Login successful:', response);
+            Cookies.set('token', response.token);
+            Cookies.set('isLoggedIn', "true");
+            router.push('/my-profile');
             // Handle successful login (e.g., redirect or save token)
         } catch (err: any) {
             setError(err.message);

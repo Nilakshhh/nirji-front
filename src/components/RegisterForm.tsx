@@ -1,5 +1,9 @@
+"use client";
+
 import React, { useState } from 'react';
 import { register } from '../lib/mutations'; // Adjust the path as necessary
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 interface RegisterFormProps {
   onSwitch: () => void;
@@ -11,6 +15,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitch }) => {
   const [password, setPassword] = useState('');
   const [dpImage, setDpImage] = useState<File | null>(null);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
@@ -25,14 +30,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitch }) => {
               try {
                   const response = await register(username, email, password, imageData);
                   console.log('Registration successful:', response);
+                  Cookies.set('token', response.token);
+                  Cookies.set('isLoggedIn', "true");
+                  router.push('/my-profile');
                   // Handle successful registration (e.g., redirect or show a message)
               } catch (err:any) {
                   setError(err.message);
               }
           };
-      } else {
-          setError("Please upload a display picture.");
-      }
+      } 
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
