@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import UploadImageModal from '@/components/UploadimageModal';
 import { user_details } from '@/lib/queries'; // Adjust the import path as necessary
 import Cookies from 'js-cookie';
+import Banner from '@/components/ProfileBanner';
 
 const MyProfile: React.FC = () => {
   const id = Cookies.get('id'); 
@@ -17,16 +18,16 @@ const MyProfile: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const data = await user_details(id); // Fetch user details using the user ID
-        setUserData(data); // Store the user data in state
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    };
+  const fetchUserDetails = async () => {
+    try {
+      const data = await user_details(id); // Fetch user details using the user ID
+      setUserData(data); // Store the user data in state
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
 
+  useEffect(() => {
     if (id) {
       fetchUserDetails(); // Fetch details if the ID is available
     }
@@ -38,18 +39,20 @@ const MyProfile: React.FC = () => {
 
   return (
     <div>
-      <h1>My Profile</h1>
-      {userData.dpImage ? (
-        <img src={userData.dpImage} alt="Profile" className="rounded-full w-32 h-32" />
-      ) : (
-        <p>No profile image available.</p>
-      )}
-      <button onClick={handleOpenModal} className="bg-green-500 text-white px-4 py-2 rounded">
-        Upload Profile Image
-      </button>
-      <UploadImageModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <Banner
+        profileImage={userData.dpImage} // Replace with actual image URL
+        profileName={userData.username}
+        numberOfPosts={userData.profileImages.length}
+        onPost={handleOpenModal}
+      />
       
-      <h2 className="mt-4">Profile Images</h2>
+      <UploadImageModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onUploadSuccess={fetchUserDetails} // Pass the fetch function as a prop
+      />
+      
+      <h2 className="mt-4">Posts</h2>
       <div className="grid grid-cols-3 gap-2">
         {userData.profileImages.map((image: any, index: number) => (
           <img key={index} src={image.data} alt={`Profile Image ${index + 1}`} className="rounded-lg w-full h-auto" />
@@ -60,4 +63,3 @@ const MyProfile: React.FC = () => {
 };
 
 export default MyProfile;
-

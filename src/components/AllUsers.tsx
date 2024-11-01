@@ -1,6 +1,7 @@
 // components/UsersList.tsx
 import React, { useEffect, useState } from 'react';
 import { all_users } from '../lib/queries'; // Adjust the path as necessary
+import { useRouter } from 'next/navigation';
 
 interface User {
     id: number; // or whatever your user ID type is
@@ -11,6 +12,7 @@ interface User {
 const UsersList: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [error, setError] = useState<string>('');
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -34,7 +36,7 @@ const UsersList: React.FC = () => {
                 {users.map((user) => (
                     <div key={user.id} className="border rounded-lg p-4 shadow-md">
                         <img src={user.dpImage} alt={`${user.username}'s profile`} className="rounded-full h-20 w-20 object-cover mb-2" />
-                        <h3 className="font-bold">{user.username}</h3>
+                        <h3 className="font-bold cursor-pointer" onClick={() => router.push(`/profile/${user.id}`)}>{user.username}</h3>
                     </div>
                 ))}
             </div>

@@ -6,9 +6,14 @@ import Cookies from 'js-cookie';
 interface UploadImageModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onUploadSuccess: () => void; // New prop for successful upload
 }
 
-const UploadImageModal: React.FC<UploadImageModalProps> = ({ isOpen, onClose }) => {
+const UploadImageModal: React.FC<UploadImageModalProps> = ({
+  isOpen,
+  onClose,
+  onUploadSuccess, // Destructure the new prop
+}) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +25,6 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({ isOpen, onClose }) 
   };
 
   const handleUpload = async () => {
-    
     if (!imageFile) return;
 
     setLoading(true);
@@ -35,6 +39,7 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({ isOpen, onClose }) 
         const userId = Cookies.get('id');
         const response = await upload_profile_image(userId, token, imageData);
         console.log(response); // Handle response (you can display success message or refresh data)
+        onUploadSuccess(); // Call the upload success callback
         onClose(); // Close modal after successful upload
       } catch (error: any) {
         setError(error.message);
