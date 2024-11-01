@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { login } from '../lib/mutations'; // Adjust the path as necessary
 import Cookies from 'js-cookie';
@@ -20,6 +21,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitch }) => {
         try {
             const response = await login(username, password);
             console.log('Login successful:', response);
+            Cookies.set('id', response.id);
             Cookies.set('token', response.token);
             Cookies.set('isLoggedIn', "true");
             router.push('/my-profile');

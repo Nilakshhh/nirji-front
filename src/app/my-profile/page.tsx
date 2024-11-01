@@ -1,13 +1,27 @@
-// app/page.tsx
+"use client";
+import React, { useState } from 'react';
+import UploadImageModal from '@/components/UploadimageModal';
 
-import React from 'react';
+const MyProfile: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const Page: React.FC = () => {
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Hello</h1>
+    <div>
+      <h1>My Profile</h1>
+      <button onClick={handleOpenModal} className="bg-green-500 text-white px-4 py-2 rounded">
+        Upload Profile Image
+      </button>
+      <UploadImageModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
 
-export default Page;
+export default MyProfile;

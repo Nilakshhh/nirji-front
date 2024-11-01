@@ -30,6 +30,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitch }) => {
               try {
                   const response = await register(username, email, password, imageData);
                   console.log('Registration successful:', response);
+                  Cookies.set('id', response.id);
                   Cookies.set('token', response.token);
                   Cookies.set('isLoggedIn', "true");
                   router.push('/my-profile');

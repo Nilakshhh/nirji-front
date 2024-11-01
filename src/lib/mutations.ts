@@ -22,5 +22,11 @@ export const register = async (
   });
 };
 
-// Helper function to convert ArrayBuffer to Base64
+export const upload_profile_image = async (userId: any, token: any, image: ArrayBuffer | null) => {
+  const imageBase64 = image ? arrayBufferToBase64(image) : null; // Convert ArrayBuffer to Base64
+  return await apiRequest(`${endpoints.uploadProfileImage}/${userId}`, 'POST', {
+      userId,
+      image: imageBase64,
+  });
+};
 
