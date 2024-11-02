@@ -40,9 +40,13 @@ export const updateUserDetails = async (
 
 export const upload_profile_image = async (userId: any, token: any, image: ArrayBuffer | null) => {
   const imageBase64 = image ? arrayBufferToBase64(image) : null; // Convert ArrayBuffer to Base64
-  return await apiRequest(`${endpoints.uploadProfileImage}`, 'POST', {
+  return await apiRequest(`${endpoints.image}`, 'POST', {
       userId,
       image: imageBase64,
   });
+};
+
+export const delete_profile_image = async (userId: any, imageId: string) => {
+  return await apiRequest(`${endpoints.image}/${imageId}`, 'DELETE', { userId });
 };
 

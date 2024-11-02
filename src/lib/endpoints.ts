@@ -4,5 +4,5 @@ export const endpoints = {
     users: "/users",
     userdetails: "/users",
     updateUser: "/users",
-    uploadProfileImage: "/users/image-upload"
+    image: "/users/image"
 };
