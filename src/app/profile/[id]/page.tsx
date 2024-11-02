@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import Banner from '@/components/ProfileBanner';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
+import { LikeUser } from '@/lib/mutations';
 
 const MyProfile: React.FC = () => {
   const router = useRouter();
@@ -37,6 +38,16 @@ const MyProfile: React.FC = () => {
     }
   };
 
+  const handleLike = async (isLiking: boolean) => {
+    if (isLiking)
+    {try {
+      await LikeUser(id);
+      fetchUserDetails();
+    } catch (error) {
+      console.error('Error updating user details:', error);
+    }}
+  };
+
   useEffect(() => {
     if (id) {
       fetchUserDetails(); // Fetch details if the ID is available
@@ -53,9 +64,11 @@ const MyProfile: React.FC = () => {
         profileImage={userData.dpImage} // Replace with actual image URL
         profileName={userData.username}
         numberOfPosts={userData.profileImages.length}
+        numberOfLikes={userData.likes}
         bio={userData.bio}
         onPost={handleOpenModal}
         onLogout={handleLogout}
+        onLike={handleLike}
         showButtons={false}
       />
       

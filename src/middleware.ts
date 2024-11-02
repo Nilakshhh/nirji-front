@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define paths that require login
-  const pathsThatRequireLogin = ['/my-profile', '/profile'];
+  const pathsThatRequireLogin = ['/my-profile'];
 
   // Check if the user is accessing a path that requires login
   if (pathsThatRequireLogin.some(p => path.startsWith(p)) && !isLoggedIn) {

@@ -70,6 +70,7 @@ const MyProfile: React.FC = () => {
         profileImage={userData.dpImage}
         profileName={userData.username}
         numberOfPosts={userData.profileImages.length}
+        numberOfLikes={userData.likes}
         bio={userData.bio}
         onPost={handleOpenModal}
         onLogout={handleLogout}

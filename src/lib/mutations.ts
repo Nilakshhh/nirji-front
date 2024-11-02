@@ -36,6 +36,11 @@ export const updateUserDetails = async (
     bio
   });
 };
+export const LikeUser = async (
+  id: any,
+) => {
+  return await apiRequest(`${endpoints.updateUser}/${id}`, 'PATCH', {});
+};
 
 
 export const upload_profile_image = async (userId: any, token: any, image: ArrayBuffer | null) => {
